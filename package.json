@@ -1,27 +1,16 @@
 {
-  "name": "erp-web",
-  "version": "0.1.0",
+  "name": "zewar-desk-workspace",
+  "version": "1.0.0",
   "private": true,
+  "description": "Zewar Desk ERP - Jewellery Business Management System",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "dev": "cd zewar-desk-erp && npm run dev",
+    "build": "cd zewar-desk-erp && npm run build",
+    "start": "cd zewar-desk-erp && npm start",
+    "lint": "cd zewar-desk-erp && npm run lint",
+    "type-check": "cd zewar-desk-erp && npm run type-check",
+    "install-deps": "cd zewar-desk-erp && npm install"
   },
-  "dependencies": {
-    "next": "^16.1.6",
-    "pg": "^8.19.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "^16.1.6",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }
