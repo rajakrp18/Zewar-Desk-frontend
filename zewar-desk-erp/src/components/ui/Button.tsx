@@ -1,16 +1,58 @@
 // src/components/ui/Button.tsx
+/**
+ * Button Component
+ * 
+ * Reusable button component with multiple variants and sizes.
+ * Variants:
+ * - primary: Main CTA button (solid background with premium gold accent)
+ * - secondary: Secondary action button
+ * - outline: Border-only button
+ * - ghost: Text-only button
+ * - danger: Destructive action button (red)
+ * - gold: Premium gold accent button
+ * 
+ * Sizes:
+ * - sm: Small (padding and text)
+ * - md: Medium (default)
+ * - lg: Large (prominent)
+ * 
+ * Features:
+ * - Loading state with spinner
+ * - Full-width option for forms
+ * - Accessible with aria attributes
+ * - Forwarded ref for programmatic access
+ * - Premium shadow and hover effects
+ */
+
 'use client'
 
 import { ButtonHTMLAttributes, forwardRef } from 'react'
 import { cn } from '@/lib/utils'
 
+/**
+ * Button component props interface
+ * Extends standard HTML button attributes
+ */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
+  /** Visual style variant */
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'gold'
+  /** Button size */
   size?: 'sm' | 'md' | 'lg'
+  /** Loading state - shows spinner and disables button */
   isLoading?: boolean
+  /** Make button full width of container */
   fullWidth?: boolean
 }
 
+/**
+ * Button Component
+ * 
+ * @example
+ * <Button variant="primary" size="lg">Click me</Button>
+ * <Button variant="gold" size="lg">Premium Action</Button>
+ * <Button variant="outline" isLoading={isLoading}>Submit</Button>
+ * <Button variant="danger" onClick={handleDelete}>Delete</Button>
+ */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
@@ -25,20 +67,21 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const baseStyles = 'inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50'
+    const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer'
     
     const variants = {
-      primary: 'bg-neutral-900 text-white hover:bg-neutral-800 focus-visible:ring-neutral-900',
-      secondary: 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 focus-visible:ring-neutral-500',
-      outline: 'border border-neutral-300 bg-transparent hover:bg-neutral-50 focus-visible:ring-neutral-500',
-      ghost: 'hover:bg-neutral-100 focus-visible:ring-neutral-500',
-      danger: 'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-600',
+      primary: 'bg-neutral-900 text-white hover:bg-neutral-800 hover:shadow-lg active:shadow-md focus-visible:ring-neutral-900 shadow-md',
+      secondary: 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 hover:shadow-base active:shadow-none focus-visible:ring-neutral-500 shadow-sm',
+      outline: 'border-2 border-neutral-300 bg-white text-neutral-900 hover:border-neutral-400 hover:bg-neutral-50 hover:shadow-base active:shadow-none focus-visible:ring-neutral-500',
+      ghost: 'text-neutral-700 hover:bg-neutral-100 focus-visible:ring-neutral-500',
+      danger: 'bg-red-600 text-white hover:bg-red-700 hover:shadow-lg active:shadow-md focus-visible:ring-red-600 shadow-md',
+      gold: 'bg-gradient-to-r from-gold-400 to-gold-500 text-white hover:from-gold-500 hover:to-gold-600 hover:shadow-lg active:shadow-md focus-visible:ring-gold-500 shadow-lg font-semibold tracking-wide',
     }
     
     const sizes = {
       sm: 'h-9 px-3 text-sm rounded-md',
-      md: 'h-10 px-4 text-sm rounded-md',
-      lg: 'h-11 px-6 text-base rounded-lg',
+      md: 'h-10 px-4 text-sm rounded-lg',
+      lg: 'h-12 px-6 text-base rounded-lg',
     }
     
     return (

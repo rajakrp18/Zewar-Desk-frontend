@@ -1,28 +1,60 @@
 /* src/app/globals.css */
+/**
+ * Global Styles and Tailwind Configuration
+ * 
+ * This file contains:
+ * - Tailwind CSS directives (base, components, utilities)
+ * - Global HTML element styles
+ * - Custom component utilities
+ * - Global animations and effects
+ * 
+ * Tailwind layers (in order of precedence):
+ * 1. @tailwind base - Reset and default element styles
+ * 2. @tailwind components - Custom component classes
+ * 3. @tailwind utilities - Utility-first classes
+ */
+
+/* Import Tailwind CSS base, component, and utility layers */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * BASE LAYER
+ * Styles for HTML elements before any Tailwind utilities
+ */
 @layer base {
+  /* All elements - default border color */
   * {
     @apply border-neutral-200;
   }
   
+  /* Smooth scrolling for anchor links */
   html {
     @apply scroll-smooth;
   }
   
+  /* Body text color */
   body {
     @apply text-neutral-900;
   }
   
+  /* Heading styles - font weight and letter spacing */
   h1, h2, h3, h4, h5, h6 {
     @apply font-semibold tracking-tight;
   }
 }
 
+/**
+ * COMPONENT LAYER
+ * Custom reusable component classes using @apply
+ */
 @layer components {
-  /* Container utilities */
+  /**
+   * Container Utility
+   * Responsive max-width container with padding
+   * Used in most page sections
+   */
   .container-custom {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }

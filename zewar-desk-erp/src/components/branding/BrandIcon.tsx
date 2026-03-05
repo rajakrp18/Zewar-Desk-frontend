@@ -1,9 +1,34 @@
 // src/components/branding/BrandIcon.tsx
+/**
+ * Brand Icon Component
+ * 
+ * SVG diamond shape representing the Zewar Desk brand.
+ * Premium gold gradient fill with drop shadow effect.
+ * 
+ * Can be resized and customized with props.
+ * Used in Logo component and branding elements.
+ */
+
+/**
+ * BrandIcon component props
+ */
 interface BrandIconProps {
+  /** Size of the SVG in pixels */
   size?: number
+  /** Additional CSS classes for styling */
   className?: string
 }
 
+/**
+ * Brand Icon Component
+ * 
+ * Renders a diamond-shaped SVG with gold gradient.
+ * Premium, elegant design for jewellery ERP system.
+ * 
+ * @example
+ * <BrandIcon size={40} /> // 40px diamond
+ * <BrandIcon size={80} className="hover:opacity-80" /> // Large with hover effect
+ */
 export function BrandIcon({ size = 40, className = '' }: BrandIconProps) {
   return (
     <svg

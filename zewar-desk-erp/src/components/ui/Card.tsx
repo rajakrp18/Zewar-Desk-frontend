@@ -1,16 +1,47 @@
 // src/components/ui/Card.tsx
+/**
+ * Card Component System
+ * 
+ * Compound component pattern for flexible card layouts.
+ * Includes:
+ * - Card: Main container with premium styling
+ * - CardHeader: Header section with padding
+ * - CardTitle: Heading text with premium typography
+ * - CardDescription: Subtitle/description text
+ * - CardContent: Main content area
+ * - CardFooter: Footer section for actions
+ * 
+ * Useful for data containers, stats, forms, etc.
+ * Features premium shadows, borders, and hover effects
+ */
+
 import { HTMLAttributes, forwardRef } from 'react'
 import { cn } from '@/lib/utils'
 
+/**
+ * Card component props interface
+ */
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {}
 
+/**
+ * Main Card Container
+ * Premium styling with shadow and border
+ * 
+ * @example
+ * <Card>
+ *   <CardHeader>
+ *     <CardTitle>Title</CardTitle>
+ *   </CardHeader>
+ *   <CardContent>Content here</CardContent>
+ * </Card>
+ */
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className, ...props }, ref) => {
     return (
       <div
         ref={ref}
         className={cn(
-          'rounded-lg border border-neutral-200 bg-white shadow-sm',
+          'rounded-xl border border-neutral-200 bg-white shadow-card hover:shadow-lg transition-shadow duration-200',
           className
         )}
         {...props}
@@ -26,7 +57,7 @@ export const CardHeader = forwardRef<HTMLDivElement, CardProps>(
     return (
       <div
         ref={ref}
-        className={cn('flex flex-col space-y-1.5 p-6', className)}
+        className={cn('flex flex-col space-y-2 p-6 border-b border-neutral-100', className)}
         {...props}
       />
     )
@@ -40,7 +71,7 @@ export const CardTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadi
     return (
       <h3
         ref={ref}
-        className={cn('text-lg font-semibold leading-none tracking-tight', className)}
+        className={cn('text-lg font-semibold leading-none tracking-tight text-neutral-900', className)}
         {...props}
       />
     )
@@ -68,7 +99,7 @@ export const CardContent = forwardRef<HTMLDivElement, CardProps>(
     return (
       <div
         ref={ref}
-        className={cn('p-6 pt-0', className)}
+        className={cn('p-6', className)}
         {...props}
       />
     )
@@ -82,7 +113,7 @@ export const CardFooter = forwardRef<HTMLDivElement, CardProps>(
     return (
       <div
         ref={ref}
-        className={cn('flex items-center p-6 pt-0', className)}
+        className={cn('flex items-center justify-between p-6 pt-4 border-t border-neutral-100', className)}
         {...props}
       />
     )

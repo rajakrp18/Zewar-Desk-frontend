@@ -1,14 +1,45 @@
 // src/components/branding/Logo.tsx
+/**
+ * Logo Component
+ * 
+ * Responsive brand logo with icon and optional text.
+ * Sizes:
+ * - sm: Small (navbar, compact spaces)
+ * - md: Medium (default)
+ * - lg: Large (landing page hero)
+ * 
+ * Features:
+ * - Linkable to home page
+ * - Optional text label
+ * - Responsive sizing
+ * - Can be customized with href and className
+ */
+
 import Link from 'next/link'
 import { BrandIcon } from './BrandIcon'
 
+/**
+ * Logo component props
+ */
 interface LogoProps {
+  /** Size variant */
   size?: 'sm' | 'md' | 'lg'
+  /** Show/hide brand text next to icon */
   showText?: boolean
+  /** Navigation link target */
   href?: string
+  /** Additional CSS classes */
   className?: string
 }
 
+/**
+ * Logo Component
+ * 
+ * @example
+ * <Logo size="lg" showText /> // Large with text
+ * <Logo size="sm" /> // Small icon only
+ * <Logo href="/dashboard" /> // Links to dashboard
+ */
 export function Logo({ 
   size = 'md', 
   showText = true, 

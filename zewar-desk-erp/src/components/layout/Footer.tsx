@@ -1,17 +1,44 @@
 // src/components/layout/Footer.tsx
+/**
+ * Footer Component
+ * 
+ * Bottom section of pages with:
+ * - Brand/company information
+ * - Quick links (navigation shortcuts)
+ * - Company links
+ * - Legal links (privacy, terms)
+ * - Social media links
+ * - Copyright notice with dynamic year
+ * 
+ * Dark theme (neutral-900) for visual separation
+ * Responsive grid layout
+ */
+
 import Link from 'next/link'
 import { Logo } from '@/components/branding/Logo'
 import { ROUTES } from '@/lib/constants'
 
+/**
+ * Footer Component
+ * 
+ * Renders:
+ * - Company information
+ * - Navigation links
+ * - Social links
+ * - Copyright notice
+ */
 export function Footer() {
+  // Dynamic copyright year
   const currentYear = new Date().getFullYear()
 
   return (
     <footer className="bg-neutral-900 text-white">
       <div className="container-custom py-16">
+        {/* Four column grid: Brand, Product, Company, Legal, Social */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-          {/* Brand */}
+          {/* Brand and description column */}
           <div className="space-y-4">
+            {/* Logo with inverted colors for dark background */}
             <div className="invert">
               <Logo size="sm" showText={true} />
             </div>

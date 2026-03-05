@@ -1,3 +1,25 @@
+// src/app/signup/page.tsx
+/**
+ * Signup Page Component
+ * 
+ * Handles user registration with comprehensive validation.
+ * Multi-step form with sections:
+ * 1. Business Information (business name, owner name)
+ * 2. Contact Details (email, phone number)
+ * 3. Security Credentials (password, password confirmation)
+ * 
+ * Features:
+ * - Real-time form validation
+ * - Custom validation for Indian phone numbers
+ * - Password confirmation matching
+ * - Terms and conditions agreement
+ * - Loading state during submission
+ * - Error messages for invalid inputs
+ * 
+ * Currently validates on client-side.
+ * Phase 2 will add backend validation and user creation.
+ */
+
 'use client'
 
 import { useState } from 'react'
@@ -8,6 +30,10 @@ import { Input } from '@/components/ui/Input'
 import { ROUTES } from '@/lib/constants'
 import { isValidEmail, isValidPhone } from '@/lib/utils'
 
+/**
+ * Form state interface for signup form
+ * Tracks all user input and validation state
+ */
 interface SignupForm {
   businessName: string
   ownerName: string

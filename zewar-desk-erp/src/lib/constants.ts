@@ -1,20 +1,41 @@
 // src/lib/constants.ts
-
 /**
- * Application Constants
+ * Global Application Constants
+ * Centralized configuration for routes, API endpoints, and app metadata
  */
 
+// ============================================================================
+// APP METADATA
+// ============================================================================
+
+/** Application name displayed in UI */
 export const APP_NAME = 'Zewar Desk'
+
+/** Short description of the application */
 export const APP_DESCRIPTION = 'Professional Jewellery ERP System'
+
+/** Current version number */
 export const APP_VERSION = '1.0.0'
 
+// ============================================================================
+// ROUTE PATHS
+// ============================================================================
 /**
- * Route paths
+ * All application routes
+ * Use these constants instead of hardcoding route strings
+ * Makes refactoring easier and prevents typos
  */
 export const ROUTES = {
+  // Public routes
   HOME: '/',
+  FEATURES: '/features',
+  PRICING: '/pricing',
+  ABOUT: '/about',
+  CONTACT: '/contact',
   LOGIN: '/login',
   SIGNUP: '/signup',
+  
+  // Dashboard routes
   DASHBOARD: '/dashboard',
   INVENTORY: '/dashboard/inventory',
   CUSTOMERS: '/dashboard/customers',
@@ -24,28 +45,37 @@ export const ROUTES = {
   SETTINGS: '/dashboard/settings',
 } as const
 
+// ============================================================================
+// API ENDPOINTS (Phase 2 - Backend Integration)
+// ============================================================================
 /**
- * API endpoints (for Phase 2)
+ * Backend API endpoints for HTTP requests
+ * These will be used when backend is integrated in Phase 2
+ * Currently placeholders for future API integration
  */
 export const API_ENDPOINTS = {
+  // Authentication endpoints
   AUTH: {
     LOGIN: '/api/auth/login',
     SIGNUP: '/api/auth/signup',
     LOGOUT: '/api/auth/logout',
     VERIFY: '/api/auth/verify',
   },
+  // Inventory management endpoints
   INVENTORY: {
     LIST: '/api/inventory',
     CREATE: '/api/inventory/create',
     UPDATE: '/api/inventory/update',
     DELETE: '/api/inventory/delete',
   },
+  // Customer management endpoints
   CUSTOMERS: {
     LIST: '/api/customers',
     CREATE: '/api/customers/create',
     UPDATE: '/api/customers/update',
     DELETE: '/api/customers/delete',
   },
+  // Order management endpoints
   ORDERS: {
     LIST: '/api/orders',
     CREATE: '/api/orders/create',
