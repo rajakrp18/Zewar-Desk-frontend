@@ -11,10 +11,13 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "clsx": "^2.1.0",
+    "date-fns": "^4.1.0",
     "next": "^14.2.35",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "clsx": "^2.1.0",
+    "react-hook-form": "^7.71.2",
+    "react-hot-toast": "^2.6.0",
     "tailwind-merge": "^2.2.0"
   },
   "devDependencies": {
