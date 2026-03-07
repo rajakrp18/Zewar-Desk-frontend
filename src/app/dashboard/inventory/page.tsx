@@ -1,174 +1,188 @@
+// EXACT PATH: src/app/dashboard/inventory/page.tsx
+// PURPOSE: Main inventory list page with search and filters
+
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import Link from 'next/link'
+import { Metadata } from 'next'
+import { useInventory } from '@/hooks/useInventory'
+import { InventoryTable } from '@/components/inventory/InventoryTable'
+import { CategoryFilter } from '@/components/inventory/CategoryFilter'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
-
-interface InventoryItem {
-  id: string
-  name: string
-  category: 'Gold' | 'Diamond' | 'Silver' | 'Precious Stone'
-  weight: number
-  purity: string
-  quantity: number
-  rate: number
-  value: number
-  lastUpdated: string
-}
+import { Card } from '@/components/ui/Card'
+import { formatCurrency } from '@/lib/utils'
+import { GOLD_PURITY_OPTIONS } from '@/lib/constants'
 
 export default function InventoryPage() {
+  const { 
+    items, 
+    isLoading, 
+    searchItems, 
+    deleteItem,
+    getLowStockItems,
+    getTotalStockValue
+  } = useInventory()
+  
   const [searchTerm, setSearchTerm] = useState('')
-  const [filterCategory, setFilterCategory] = useState<string>('All')
-
-  // Empty inventory for new users
-  const [items] = useState<InventoryItem[]>([])
-
-  const filteredItems = items.filter(item => {
-    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = filterCategory === 'All' || item.category === filterCategory
-    return matchesSearch && matchesCategory
-  })
-
-  const totalInventoryValue = items.reduce((sum, item) => sum + item.value, 0)
-  const categories = ['All', 'Gold', 'Diamond', 'Silver', 'Precious Stone']
-
-  const formatCurrency = (value: number) => {
-    if (value >= 10000000) {
-      return `₹${(value / 10000000).toFixed(2)}Cr`
-    } else if (value >= 100000) {
-      return `₹${(value / 100000).toFixed(2)}L`
-    }
-    return `₹${value.toLocaleString()}`
-  }
-
-  return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-4xl font-bold text-neutral-900">Inventory</h1>
-          <p className="text-neutral-600 mt-2">Manage your jewelry inventory and stock</p>
+  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedPurity, setSelectedPurity] = useState('all')
+  const [showLowStock, setShowLowStock] = useState(false)
+  
+  // Filter items based on current filters
+  const filteredItems = searchItems(
+    searchTerm,
+    selectedCategory,
+    selectedPurity,
+    showLowStock
+  )
+  
+  const lowStockCount = getLowStockItems().length
+  const totalValue = getTotalStockValue()
+  
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="text-4xl mb-4">⏳</div>
+          <p className="text-neutral-600">Loading inventory...</p>
         </div>
-        <Button variant="gold" size="lg" className="md:w-auto w-full">
-          ➕ Add New Item
-        </Button>
       </div>
-
+    )
+  }
+  
+  return (
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-neutral-900">Inventory</h1>
+          <p className="text-neutral-600 mt-1">
+            Manage your jewellery stock and items
+          </p>
+        </div>
+        <Link href="/dashboard/inventory/add">
+          <Button variant="primary">
+            ➕ Add New Item
+          </Button>
+        </Link>
+      </div>
+      
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-sm text-neutral-600 font-medium mb-2">Total Inventory Value</p>
-            <p className="text-3xl font-bold text-gold-600">{formatCurrency(totalInventoryValue)}</p>
-          </CardContent>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-neutral-600">Total Items</p>
+              <p className="text-2xl font-bold text-neutral-900 mt-1">
+                {items.length}
+              </p>
+            </div>
+            <div className="text-4xl">📦</div>
+          </div>
         </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-sm text-neutral-600 font-medium mb-2">Total Items</p>
-            <p className="text-3xl font-bold text-neutral-900">{items.reduce((sum, item) => sum + item.quantity, 0)}</p>
-          </CardContent>
+        
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-neutral-600">Stock Value</p>
+              <p className="text-2xl font-bold text-neutral-900 mt-1">
+                {formatCurrency(totalValue)}
+              </p>
+            </div>
+            <div className="text-4xl">💰</div>
+          </div>
         </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-sm text-neutral-600 font-medium mb-2">Item Types</p>
-            <p className="text-3xl font-bold text-neutral-900">{items.length}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-sm text-neutral-600 font-medium mb-2">Last Updated</p>
-            <p className="text-lg font-bold text-neutral-900">Today</p>
-          </CardContent>
+        
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-neutral-600">Low Stock Items</p>
+              <p className="text-2xl font-bold text-orange-600 mt-1">
+                {lowStockCount}
+              </p>
+            </div>
+            <div className="text-4xl">⚠️</div>
+          </div>
         </Card>
       </div>
-
-      {/* Filters and Search */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Search & Filter</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Input
-            label="Search Items"
-            placeholder="Search by name..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-neutral-700">Category</label>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setFilterCategory(cat)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                    filterCategory === cat
-                      ? 'bg-gold-500 text-white shadow-lg'
-                      : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+      
+      {/* Filters */}
+      <Card className="p-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Search */}
+          <div className="md:col-span-2">
+            <Input
+              placeholder="Search by name, description, or barcode..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
-        </CardContent>
+          
+          {/* Category Filter */}
+          <CategoryFilter
+            value={selectedCategory}
+            onChange={setSelectedCategory}
+          />
+          
+          {/* Purity Filter */}
+          <select
+            value={selectedPurity}
+            onChange={(e) => setSelectedPurity(e.target.value)}
+            className="h-10 px-4 rounded-md border border-neutral-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900"
+          >
+            <option value="all">All Purities</option>
+            {GOLD_PURITY_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        
+        {/* Low Stock Toggle */}
+        <div className="mt-4 flex items-center">
+          <input
+            type="checkbox"
+            id="lowStock"
+            checked={showLowStock}
+            onChange={(e) => setShowLowStock(e.target.checked)}
+            className="w-4 h-4 text-neutral-900 border-neutral-300 rounded focus:ring-neutral-900"
+          />
+          <label htmlFor="lowStock" className="ml-2 text-sm text-neutral-700">
+            Show only low stock items (quantity &lt; 10)
+          </label>
+        </div>
       </Card>
-
-      {/* Inventory Items Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Inventory Items ({filteredItems.length})</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {filteredItems.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">📦</div>
-              <h3 className="text-xl font-bold text-neutral-900 mb-2">No Inventory Items Yet</h3>
-              <p className="text-neutral-600 mb-6">Start by adding your first inventory item to begin tracking</p>
-              <Button variant="gold" size="lg">
-                ➕ Add First Item
-              </Button>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b-2 border-neutral-200">
-                    <th className="text-left py-4 px-4 font-semibold text-neutral-900">Item Name</th>
-                    <th className="text-left py-4 px-4 font-semibold text-neutral-900">Category</th>
-                    <th className="text-left py-4 px-4 font-semibold text-neutral-900">Purity</th>
-                    <th className="text-left py-4 px-4 font-semibold text-neutral-900">Quantity</th>
-                    <th className="text-left py-4 px-4 font-semibold text-neutral-900">Rate</th>
-                    <th className="text-left py-4 px-4 font-semibold text-neutral-900">Total Value</th>
-                    <th className="text-left py-4 px-4 font-semibold text-neutral-900">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredItems.map((item) => (
-                    <tr key={item.id} className="border-b border-neutral-100 hover:bg-neutral-50 transition-colors">
-                      <td className="py-4 px-4 text-neutral-900 font-medium">{item.name}</td>
-                      <td className="py-4 px-4">
-                        <span className="px-3 py-1 bg-gold-100 text-gold-700 rounded-full text-sm font-medium">
-                          {item.category}
-                        </span>
-                      </td>
-                      <td className="py-4 px-4 text-neutral-600">{item.purity}</td>
-                      <td className="py-4 px-4 text-neutral-600">{item.quantity}</td>
-                      <td className="py-4 px-4 text-neutral-600">{formatCurrency(item.rate)}</td>
-                      <td className="py-4 px-4 text-neutral-900 font-semibold">{formatCurrency(item.value)}</td>
-                      <td className="py-4 px-4">
-                        <button className="text-gold-600 hover:text-gold-700 font-medium text-sm">Edit</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      
+      {/* Results Count */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-neutral-600">
+          Showing {filteredItems.length} of {items.length} items
+        </p>
+        
+        {(searchTerm || selectedCategory !== 'all' || selectedPurity !== 'all' || showLowStock) && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setSearchTerm('')
+              setSelectedCategory('all')
+              setSelectedPurity('all')
+              setShowLowStock(false)
+            }}
+          >
+            Clear Filters
+          </Button>
+        )}
+      </div>
+      
+      {/* Inventory Table */}
+      <InventoryTable 
+        items={filteredItems}
+        onDelete={deleteItem}
+      />
     </div>
   )
 }
